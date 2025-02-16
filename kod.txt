@@ -30,7 +30,7 @@ begin
             if  rising_edge(clk) then
                         
                 --Dosyayı aç
-                file_open(file_vectors,"3.txt",read_mode);
+                file_open(file_vectors,"input.txt",read_mode);
                 file_open(file_results,"output.txt",write_mode);
                 
                 
