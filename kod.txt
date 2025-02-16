@@ -1,0 +1,57 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.all;
+use STD.textio.all;
+use ieee.std_logic_textio.all;
+
+
+entity imageProcessor is
+    Port ( clk : in STD_LOGIC;
+           reset : in STD_LOGIC;
+           start_processing : in STD_LOGIC);
+end imageProcessor;
+
+architecture Behavioral of imageProcessor is
+    file file_vectors : text;
+    file file_results : text;
+     type histogram_arr is array (integer range <>) of integer;
+     signal histogram : histogram_arr(0 to 255) := (others => 0);
+begin
+    process (clk, reset)
+        variable v_iline : line;
+        variable v_oline: line;
+        variable term : integer; 
+         type histogram_arr is array (integer range <>) of integer;
+        variable  temp : histogram_arr(0 to 255) := (others => 0);
+     begin
+        if reset ='1' then
+            --ilgili başlangıç işlemleri yapılabilir burada.
+        elsif  start_processing='1' then
+            if  rising_edge(clk) then
+                        
+                --Dosyayı aç
+                file_open(file_vectors,"3.txt",read_mode);
+                file_open(file_results,"output.txt",write_mode);
+                
+                
+                 --dosyadan veri okuma işlemi
+                while not endfile(file_vectors) loop
+                readline(file_vectors, v_iline);
+                 read(v_iline, term);
+                -- pixel_data := term;
+                 temp(term):=temp(term)+1;
+                 end loop;
+                             
+                  -- dosyaya veri yazma 
+                  for i in 0 to 255 loop
+                    write(v_oline, (temp(i)));
+                    writeline(file_results, v_oline);
+                    histogram(i) <= temp(i);
+                end loop;
+end if;
+end if;
+end process;
+        --dosyaları kapat
+        file_close(file_vectors);
+        file_close(file_results);
+end Behavioral;
